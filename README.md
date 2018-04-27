@@ -19,3 +19,5 @@ Alternativley you can also use shortcuts for `attach` and `retrieve`:
 pass file add article my_super_secret_revelations.txt
 pass file cat article
 ```
+## Installation
+See [here](https://www.passwordstore.org/#extensions) for details. There is also information on how to install extensions in the `pass` man page.
