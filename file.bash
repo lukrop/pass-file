@@ -1,12 +1,14 @@
 #!/bin/bash
 
 print_usage() {
-    echo "Usage: $PROGRAM file attach|retrieve pass-name [path]"
-    echo "  Attach or retrieve file to/from password store."
+    echo "Usage: $PROGRAM file action pass-name [path]"
+    echo "Actions:"
+    echo "  store|add|attach: add new file to password store"
+    echo "  retrieve|show|cat: retrieve file from password store and print it to stdout"
     exit 0
 }
 
-cmd_attach() {
+cmd_store() {
     local path="$1.b64"
     local file="$2"
     local passfile="$PREFIX/$path.gpg"
@@ -49,8 +51,8 @@ cmd_retrieve() {
 }
 
 case $1 in
-    attach|add)
-        shift && cmd_attach "$@"
+    store|add|attach)
+        shift && cmd_store "$@"
         ;;
     retrieve|show|cat)
         shift && cmd_retrieve "$@"
