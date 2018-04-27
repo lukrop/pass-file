@@ -1,17 +1,18 @@
 # pass file
-`pass file` is a extension for adding arbitary files to the [pass](https://www.passwordstore.org/) password store. Files will be encoded using `base64` before encryption.
+`pass file` is a extension for adding arbitary files to the [pass](https://www.passwordstore.org/) password store. Files will be encoded using `base64` before encryption. This extension is inspired by [gopass](https://github.com/justwatchcom/gopass)' `binary` function to which it is also compatible. Files stored with `gopass binary` can be retrieved with `pass file` and vice versa.
 
 ## Usage
 ```
-Usage: pass file attach|retrieve pass-name [path]
-  attach|add: add new file to password store
+Usage: pass file action pass-name [path]
+Actions:
+  store|add|attach: add new file to password store
   retrieve|show|cat: retrieve file from password store and print it to stdout
 ```
 
 ## Examples
 Storing a PNG picture and retrieving it.
 ```
-pass file attach pics/secretpic mypicture.png
+pass file store pics/secretpic mypicture.png
 pass file retrieve pics/secretpic > retrieved-picture.png
 ```
 Alternativley you can also use shortcuts for `attach` and `retrieve`:
