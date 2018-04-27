@@ -8,7 +8,7 @@ Usage: pass file attach|retrieve pass-name [path]
   retrieve|show|cat: retrieve file from password store and print it to stdout
 ```
 
-## Example usage
+## Examples
 Storing a PNG picture and retrieving it.
 ```
 pass file attach pics/secretpic mypicture.png
