@@ -35,7 +35,7 @@ cmd_store() {
 
     base64 $file | $GPG -e "${GPG_RECIPIENT_ARGS[@]}" -o "$passfile" "${GPG_OPTS[@]}" 
 
-    git_add_file $passfile "Attach given file for $path to store."
+    git_add_file $passfile "Store arbitary file for $path to store."
 }
 
 cmd_retrieve() {
