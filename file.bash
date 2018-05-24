@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 print_usage() {
     echo "Usage: $PROGRAM file action pass-name [path]"
@@ -9,9 +9,13 @@ print_usage() {
 }
 
 cmd_store() {
-    local path="$1.b64"
+    local path="$1"
     local file="$2"
     local passfile="$PREFIX/$path.gpg"
+
+    if [[ ${path: -4} != ".b64" ]]; then
+	path="${path}.b64"
+    fi
 
     cd $OLDPWD # fix for relative paths
 
@@ -41,8 +45,12 @@ cmd_store() {
 }
 
 cmd_retrieve() {
-    local path="$1.b64"
+    local path="$1"
     local passfile="$PREFIX/$path.gpg"
+
+    if [[ ${path: -4} != ".b64" ]]; then
+	path="${path}.b64"
+    fi
 
     if [[ -z $path ]]; then 
         print_usage
