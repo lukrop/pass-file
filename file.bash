@@ -74,7 +74,6 @@ cmd_edit() {
 	echo "\$EDITOR not set, don't know how to open file."
 	exit 1
     else
-        check_sneaky_paths "$path"
 	local tmpfile=$(mktemp)
 	chmod 0600 $tmpfile
         cmd_retrieve $path > $tmpfile
