@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 print_usage() {
     echo "Usage: $PROGRAM file action pass-name [path]"
@@ -12,6 +12,8 @@ cmd_store() {
     local path="$1.b64"
     local file="$2"
     local passfile="$PREFIX/$path.gpg"
+
+    cd $OLDPWD # fix for relative paths
 
     check_sneaky_paths "$1"
     set_git "$passfile"
@@ -39,7 +41,7 @@ cmd_store() {
 }
 
 cmd_retrieve() {
-    local path="$1"
+    local path="$1.b64"
     local passfile="$PREFIX/$path.gpg"
 
     if [[ -z $path ]]; then 
