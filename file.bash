@@ -65,21 +65,19 @@ cmd_retrieve() {
 
 cmd_edit() {
     local path="$1"
-    local passfile="$PREFIX/$path.gpg"
 
-    if [[ ${path: -4} != ".b64" ]]; then
-	path="${path}.b64"
-    fi
     if [[ -z $path ]]; then 
         print_usage
-    elif [[ -z $EDITOR ]]; then
+    fi
+
+    if [[ -z $EDITOR ]]; then
 	echo "\$EDITOR not set, don't know how to open file."
 	exit 1
     else
         check_sneaky_paths "$path"
 	local tmpfile=$(mktemp)
 	chmod 0600 $tmpfile
-        cmd_retrieve $path $passfile > $tmpfile
+        cmd_retrieve $path > $tmpfile
 	$EDITOR $tmpfile
 	PASS_FILE_FORCE_OVERWRITE="true" cmd_store $path $tmpfile
 	rm $tmpfile
