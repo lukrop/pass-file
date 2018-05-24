@@ -5,6 +5,7 @@ print_usage() {
     echo "Actions:"
     echo "  store|add|attach: add new file to password store"
     echo "  retrieve|show|cat: retrieve file from password store and print it to stdout"
+    echo "  edit|vi: edit a file (warning: unencrypted file will be opened with \$EDITOR)"
     exit 0
 }
 

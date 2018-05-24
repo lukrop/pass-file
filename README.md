@@ -7,6 +7,7 @@ Usage: pass file action pass-name [path]
 Actions:
   store|add|attach: add new file to password store
   retrieve|show|cat: retrieve file from password store and print it to stdout
+  edit|vi: edit a file (warning: unencrypted file will be opened with $EDITOR)
 ```
 
 ## Examples
@@ -19,6 +20,10 @@ Alternativley you can also use shortcuts for `attach` and `retrieve`:
 ```
 pass file add article my_super_secret_revelations.txt
 pass file cat article
+```
+Use `edit` to edit a file:
+```
+pass file edit article
 ```
 ## Installation
 See [here](https://www.passwordstore.org/#extensions) for details. There is also information on how to install extensions in the `pass` man page.
