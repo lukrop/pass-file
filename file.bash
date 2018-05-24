@@ -76,9 +76,26 @@ cmd_edit() {
     else
 	local tmpfile=$(mktemp)
 	chmod 0600 $tmpfile
-        cmd_retrieve $path > $tmpfile
+        
+	cmd_retrieve $path > $tmpfile
+	if [[ $? -ne 0 ]]; then
+		rm $tmpfile
+		exit 1
+	fi
+
 	$EDITOR $tmpfile
+	if [[ $? -ne 0 ]]; then
+		rm $tmpfile
+		exit 1
+	fi
+
 	PASS_FILE_FORCE_OVERWRITE="true" cmd_store $path $tmpfile
+	if [[ $? -ne 0 ]]; then
+		echo "Could not save file, please check yourself."
+		echo "Tempfile: ${tmpfile}"
+		exit 1
+	fi
+
 	rm $tmpfile
     fi
 }
