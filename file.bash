@@ -11,11 +11,12 @@ print_usage() {
 cmd_store() {
     local path="$1"
     local file="$2"
-    local passfile="$PREFIX/$path.gpg"
 
     if [[ ${path: -4} != ".b64" ]]; then
 	path="${path}.b64"
     fi
+
+    local passfile="$PREFIX/$path.gpg"
 
     cd $OLDPWD # fix for relative paths
 
@@ -28,7 +29,7 @@ cmd_store() {
         die "Error: $file does not exist."
     fi
 
-    if [[ -f $passfile ]]; then
+    if [[ -f $passfile ]] && [[ "$PASS_FILE_FORCE_OVERWRITE" != "true" ]]; then
         read -r -p "A file with this name already exists in the store. Do you want to overwrite it? [y/N] " response
         if [[ $response != [yY] ]]; then
             exit 0;
@@ -46,17 +47,41 @@ cmd_store() {
 
 cmd_retrieve() {
     local path="$1"
-    local passfile="$PREFIX/$path.gpg"
 
     if [[ ${path: -4} != ".b64" ]]; then
 	path="${path}.b64"
     fi
+
+    local passfile="$PREFIX/$path.gpg"
 
     if [[ -z $path ]]; then 
         print_usage
     else
         check_sneaky_paths "$path"
         $GPG -d "${GPG_OPTS[@]}" "$passfile" | base64 -d || exit $?
+    fi
+}
+
+cmd_edit() {
+    local path="$1"
+    local passfile="$PREFIX/$path.gpg"
+
+    if [[ ${path: -4} != ".b64" ]]; then
+	path="${path}.b64"
+    fi
+    if [[ -z $path ]]; then 
+        print_usage
+    elif [[ -z $EDITOR ]]; then
+	echo "\$EDITOR not set, don't know how to open file."
+	exit 1
+    else
+        check_sneaky_paths "$path"
+	local tmpfile=$(mktemp)
+	chmod 0600 $tmpfile
+        cmd_retrieve $path $passfile > $tmpfile
+	$EDITOR $tmpfile
+	PASS_FILE_FORCE_OVERWRITE="true" cmd_store $path $tmpfile
+	rm $tmpfile
     fi
 }
 
@@ -67,6 +92,9 @@ case $1 in
     retrieve|show|cat)
         shift && cmd_retrieve "$@"
         ;;
+    edit|vi)
+	shift && cmd_edit "$@"
+	;;
     *)
         print_usage
         ;;
