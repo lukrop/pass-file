@@ -70,17 +70,29 @@ cmd_edit() {
         print_usage
     fi
 
+    if [[ ${path: -4} != ".b64" ]]; then
+	path="${path}.b64"
+    fi
+
+    local passfile="$PREFIX/$path.gpg"
+
     if [[ -z $EDITOR ]]; then
 	echo "\$EDITOR not set, don't know how to open file."
 	exit 1
     else
 	local tmpfile=$(mktemp)
+	local newfile=0
 	chmod 0600 $tmpfile
-        
-	cmd_retrieve $path > $tmpfile
-	if [[ $? -ne 0 ]]; then
-		rm $tmpfile
-		exit 1
+	
+	if [[ -f $passfile ]]; then
+		cmd_retrieve $path > $tmpfile
+		if [[ $? -ne 0 ]]; then
+			rm $tmpfile
+			exit 1
+		fi
+	else
+		echo "File does not exist, creating new file..."
+		sleep 3
 	fi
 
 	$EDITOR $tmpfile
