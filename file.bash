@@ -20,13 +20,14 @@ cmd_store() {
     local passfile="$PREFIX/$path.gpg"
 
     cd $OLDPWD # fix for relative paths
+    local file_abs_path="$OLDPWD/$file"
 
     check_sneaky_paths "$1"
     set_git "$passfile"
 
-    if [[ -z $path || -z $file ]]; then
+    if [[ -z $path || -z "$file_abs_path" ]]; then
         print_usage
-    elif [[ ! -f $file ]]; then
+    elif [[ ! -f "$file_abs_path" ]]; then
         die "Error: $file does not exist."
     fi
 
@@ -41,7 +42,7 @@ cmd_store() {
 
     set_gpg_recipients "$(dirname "$path")"
 
-    base64 $file | $GPG -e "${GPG_RECIPIENT_ARGS[@]}" -o "$passfile" "${GPG_OPTS[@]}" 
+    base64 $file_abs_path | $GPG -e "${GPG_RECIPIENT_ARGS[@]}" -o "$passfile" "${GPG_OPTS[@]}" 
 
     git_add_file $passfile "Store arbitary file for $path to store."
 }
@@ -126,4 +127,3 @@ case $1 in
         print_usage
         ;;
 esac
-
