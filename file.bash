@@ -20,7 +20,10 @@ cmd_store() {
     local passfile="$PREFIX/$path.gpg"
 
     cd $OLDPWD # fix for relative paths
-    local file_abs_path="$OLDPWD/$file"
+    case "$file" in
+        /*) local file_abs_path="$file";;
+        *) local file_abs_path="$OLDPWD/$file";;
+    esac
 
     check_sneaky_paths "$1"
     set_git "$passfile"
